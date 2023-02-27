@@ -43,7 +43,17 @@ mydb=#
     - DB container가 잘 띄워진다음 데이터를 생성해서 보내기 위해 `healthcheck`기능을 이용한다.
 
 ## 02. Model Development
+- db에서 최근 100개의 데이터를 불러서 모델을 만들고 `joblib`으로 훈련된 모델을 저장한다. (뒤에서 mlflow로 저장하는 코드로 바꿀 예정) [`.py`](./02_model_develop/01_db_train.py)
+- 저장된 모델을 불러와서 validation을 진행한다. [`.py`](./02_model_develop/02_db_validate_save_model.py)
+
 ## 03. Model Registry
+![img](./03_model_registry/model_registry.png)
+- [docker compose 파일](./03_model_registry/docker-compose.yaml)에
+    - MLflow 의 운영 정보, 모델 결과 등을 저장할 물리적인 PostgreSQL DB 서버 스펙을 정의
+    - 학습된 모델을 저장할 물리적인 저장 공간인 MinIO 서버 스펙을 정의
+    - 모델과 모델의 결과들을 관리할 MLFlow 서버를 정의
+- localhost:5001에서는 mlflow ui를 localhost:9001에서는 minio ui를 볼 수 있다.
+
 ## 04. Model Deployment
 ## 05. FastAPI
 ## 06. API Serving
