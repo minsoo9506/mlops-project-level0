@@ -55,9 +55,28 @@ mydb=#
         - 모델과 모델의 결과들을 관리할 MLFlow 서버를 정의
     - localhost:5001에서는 mlflow ui를 localhost:9001에서는 minio ui를 볼 수 있다.
 2. 모델 저장하기
+    - [`.py`](./03_model_registry/01_save_model_to_registry.py)를 실행하면 모델이 저장된다. mlflow web을 통해서 관련 내용을 확인할 수 있다.
+3. 모델 불러오기
+    - [`.py`](./03_model_registry/02_load_model_from_registry.py)을 실행하면 (run_id를 알아야함) 저장된 모델을 불러올 수 있다.
+        - run_id는 mlflow web에서 확인할 수 있다. (내 run_id = cc53b918d0a149ee8aa8020e292f2ea1)
 
 ## 04. Model Deployment
 ## 05. FastAPI
 ## 06. API Serving
+1. 모델 다운로드
+    - 일단 [`.py`](./06_api_serving/01_download_model.py)를 통해서 모델을 다운받는다.
+    - 그러면 [`sk_model`](./06_api_serving/sk_model/)이라는 폴더가 생긴다.
+2. FastAPI를 통해서 api를 구현한다.
+    - pydantic을 이용하여 schema를 구현한다. [`.py`](./06_api_serving/schemas.py)
+    - 그리고 app을 만든다. [`.py`](./06_api_serving/app.py)
+3. docker compose로 container 띄우기
+    - [`Dockerfile`](./06_api_serving/Dockerfile)
+    - [`docker-compose.yaml`](./06_api_serving/docker-compose.yaml)
+4. api가 잘되는지 확인한다.
+    - `curl -X POST http://localhost:8000/predict -H "Content-Type: application/json" -d '{"sepal_length": 6.7, "sepal_width": 3.3, "petal_length": 5.7, "petal_width": 2.1}'`
+    - swagger ui를 이용해도 된다. (`localhost:8000/docs`) 
+
 ## 07. Kafka
 ## 08. Stream
+- Consumer 를 통해 토픽으로부터 데이터를 읽어와서 API 서버의 입력으로 전달하고, inference 결과를 반환받아 Target DB 로 전달하는 Data Subscriber 를 구현
+![img](./08_stream/stream.png)
