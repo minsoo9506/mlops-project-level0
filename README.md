@@ -1,7 +1,7 @@
-# Project
+# Project (미완성)
 - mlops를 ML 엔지니어가 경험해보기
 - [해당 내용](https://mlops-for-mle.github.io/tutorial/docs/intro)을 따라가는 프로젝트
-- 2023.02.20 ~ 
+- 2023.02.20 ~ 2023.02.28
 
 # TIL
 ## 01. Database
@@ -47,9 +47,11 @@ mydb=#
 2. 저장된 모델을 불러와서 validation을 진행한다. [`.py`](./02_model_develop/02_db_validate_save_model.py)
 
 ## 03. Model Registry
+
 ![img](./03_model_registry/model_registry.png)
+
 1. mlflow 환경 만들기
-    - [docker compose 파일](./03_model_registry/docker-compose.yaml)에
+    - [`docker-compose.yaml`](./03_model_registry/docker-compose.yaml)에
         - MLflow 의 운영 정보, 모델 결과 등을 저장할 물리적인 PostgreSQL DB 서버 스펙을 정의
         - 학습된 모델을 저장할 물리적인 저장 공간인 MinIO 서버 스펙을 정의
         - 모델과 모델의 결과들을 관리할 MLFlow 서버를 정의
@@ -75,8 +77,19 @@ mydb=#
 4. api가 잘되는지 확인한다.
     - `curl -X POST http://localhost:8000/predict -H "Content-Type: application/json" -d '{"sepal_length": 6.7, "sepal_width": 3.3, "petal_length": 5.7, "petal_width": 2.1}'`
     - swagger ui를 이용해도 된다. (`localhost:8000/docs`) 
+- 나중에 08.Stream부분에서 input DB의 데이터를 API에 post하고 예측결과를 ouput DB에 저장한다.
+
+
+**이후 내용은 추후에 Kafka를 공부하고 진행할 예정이다.**
 
 ## 07. Kafka
+- 데이터가 계속 쌓이고 있고 이를 실시간으로 모델에 넣어서 결과를 쌓아야하는 상황 (Stream)
+- 이때 활용할 수 있는게 Kafka이다.
+
+![img](./07_kafka/kafka.png)
+
 ## 08. Stream
-- Consumer 를 통해 토픽으로부터 데이터를 읽어와서 API 서버의 입력으로 전달하고, inference 결과를 반환받아 Target DB 로 전달하는 Data Subscriber 를 구현
+- Consumer를 통해 토픽으로부터 데이터를 읽어와서 API 서버의 입력으로 전달하고, inference 결과를 반환받아 Target DB 로 전달하는 Data Subscriber 를 구현
+- Grafana를 통해 원본 데이터와 예측 결과 값을 실시간으로 시각화하는 대시보드 구현
+
 ![img](./08_stream/stream.png)
