@@ -45,7 +45,7 @@ def generate_data(db_connect, df):
 
 if __name__ == "__main__":
     db_connect = psycopg2.connect(
-        user="minsoo", password="1234", host="localhost", port=5432, database="mydb"
+        user="myuser", password="mypassword", host="localhost", port=5432, database="mydatabase"
     )
     df = get_data()
     generate_data(db_connect, df)

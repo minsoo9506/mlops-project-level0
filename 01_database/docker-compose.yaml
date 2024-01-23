@@ -7,11 +7,11 @@ services:
     ports:
       - 5432:5432
     environment:
-      POSTGRES_USER: minsoo
-      POSTGRES_PASSWORD: 1234
-      POSTGRES_DB: mydb
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: mydatabase
     healthcheck:
-      test: ["CMD", "pg_isready", "-q", "-U", "minsoo", "-d", "mydb"]
+      test: ["CMD", "pg_isready", "-q", "-U", "myuser", "-d", "mydatabase"]
       interval: 10s
       timeout: 5s
       retries: 5

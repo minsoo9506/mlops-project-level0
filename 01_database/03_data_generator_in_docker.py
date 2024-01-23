@@ -68,9 +68,7 @@ if __name__ == "__main__":
     parser.add_argument("--db-host", dest="db_host", type=str, default="localhost")
     args = parser.parse_args()
 
-    db_connect = psycopg2.connect(
-        user="minsoo", password="1234", host=args.db_host, port=5432, database="mydb"
-    )
+    db_connect = psycopg2.connect(user="myuser", password="mypassword", host=args.db_host port=5432, database="mydatabase")
     create_table(db_connect)
     df = get_data()
     generate_data(db_connect, df)
