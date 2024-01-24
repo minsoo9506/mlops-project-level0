@@ -19,11 +19,11 @@ os.environ["AWS_SECRET_ACCESS_KEY"] = "miniostorage"
 
 # 1. get data
 db_connect = psycopg2.connect(
-    user="minsoo",
-    password="1234",
+    user="myuser",
+    password="mypassword",
     host="localhost",
     port=5432,
-    database="mydb",
+    database="mydatabase",
 )
 df = pd.read_sql("SELECT * FROM iris_data ORDER BY id DESC LIMIT 100", db_connect)
 

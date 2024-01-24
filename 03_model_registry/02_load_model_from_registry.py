@@ -16,7 +16,7 @@ os.environ["AWS_SECRET_ACCESS_KEY"] = "miniostorage"
 # 1. load model from mlflow
 parser = ArgumentParser()
 parser.add_argument("--model-name", dest="model_name", type=str, default="sk_model")
-parser.add_argument("--run-id", dest="run_id", type=str)
+parser.add_argument("--run-id", dest="run_id", type=str, default="9c68c3eabe8944feb608ab485d5335f0")
 args = parser.parse_args()
 
 model_pipeline = mlflow.sklearn.load_model(f"runs:/{args.run_id}/{args.model_name}")
