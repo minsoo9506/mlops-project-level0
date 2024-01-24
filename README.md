@@ -60,7 +60,7 @@ mydb=#
     - [`.py`](./03_model_registry/01_save_model_to_registry.py)를 실행하면 모델이 저장된다. mlflow web을 통해서 관련 내용을 확인할 수 있다.
 3. 모델 불러오기
     - [`.py`](./03_model_registry/02_load_model_from_registry.py)을 실행하면 (run_id를 알아야함) 저장된 모델을 불러올 수 있다.
-        - run_id는 mlflow web에서 확인할 수 있다. (내 run_id = cc53b918d0a149ee8aa8020e292f2ea1)
+        - run_id는 mlflow web에서 확인할 수 있다. (내 run_id = 9c68c3eabe8944feb608ab485d5335f0)
 
 ## 04. Model Deployment
 ## 05. FastAPI
@@ -79,14 +79,21 @@ mydb=#
     - swagger ui를 이용해도 된다. (`localhost:8000/docs`) 
 - 나중에 08.Stream부분에서 input DB의 데이터를 API에 post하고 예측결과를 ouput DB에 저장한다.
 
-
-**이후 내용은 추후에 Kafka를 공부하고 진행할 예정이다.**
-
 ## 07. Kafka
 - 데이터가 계속 쌓이고 있고 이를 실시간으로 모델에 넣어서 결과를 쌓아야하는 상황 (Stream)
 - 이때 활용할 수 있는게 Kafka이다.
+- 01_database 파트에서 작성한 db서버를 Source DB이고 kafka를 이용하여 Target DB로 전달하는 시스템을 구축한다.
 
 ![img](./07_kafka/kafka.png)
+
+- 먼저, `docker compose -p part7-kafka -f kafka-docker-compose.yaml up -d` 명령어로 서비스들을 생성
+  - zookeeper, broker, schema-registry, connect
+  - 01_database에서 사용한 network를 사용
+- 01_database에서 db에 있는 iris 데이터를 가져오는 source connector를 생성
+  - source connector 생성 시 자동으로 토픽 생성
+  - `curl -X POST http://localhost:8083/connectors -H "Content-Type: application/json" -d @source_connector.json`으로 source connector 생성
+- `docker compose -p part7-target -f target-docker-compose.yaml up -d` 명령어로 target db 생성
+- `curl -X POST http://localhost:8083/connectors -H "Content-Type: application/json" -d @sink_connector.json`으로 sink connector 생성
 
 ## 08. Stream
 - Consumer를 통해 토픽으로부터 데이터를 읽어와서 API 서버의 입력으로 전달하고, inference 결과를 반환받아 Target DB 로 전달하는 Data Subscriber 를 구현
