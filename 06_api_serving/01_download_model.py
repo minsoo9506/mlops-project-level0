@@ -18,7 +18,7 @@ def download_model(args):
 if __name__ == "__main__":
     parser = ArgumentParser()
     parser.add_argument("--model-name", dest="model_name", type=str, default="sk_model")
-    parser.add_argument("--run-id", dest="run_id", type=str)
+    parser.add_argument("--run-id", dest="run_id", type=str, default="9c68c3eabe8944feb608ab485d5335f0")
     args = parser.parse_args()
 
     download_model(args)
