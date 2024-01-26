@@ -96,7 +96,16 @@ mydb=#
 - `curl -X POST http://localhost:8083/connectors -H "Content-Type: application/json" -d @sink_connector.json`으로 sink connector 생성
 
 ## 08. Stream
-- Consumer를 통해 토픽으로부터 데이터를 읽어와서 API 서버의 입력으로 전달하고, inference 결과를 반환받아 Target DB 로 전달하는 Data Subscriber 를 구현
-- Grafana를 통해 원본 데이터와 예측 결과 값을 실시간으로 시각화하는 대시보드 구현
+- Sink Connector를 쓰려면 토픽에서 데이터를 읽어서 전달할 endpoint가 필요하지만, API Serving에서는 수동으로 request를 보내고 response를 받기 때문에 Sink Connector를 사용할 수가 없음
+- 따라서 Source DB에서 데이터를 받아 API서버로 요청을 보내고, 모델의 예측 값을 받고, 받은 결과를 Target DB에 삽입하는 과정을 담당하는 코드가 필요
+- Consumer를 통해 토픽으로부터 데이터를 읽어와서 API 서버의 입력으로 전달하고, inference 결과를 반환받아 Target DB 로 전달하는 Data Subscriber를 구현 [`.py`](./08_stream/data_subscriber.py)
+  - psycopg2 패키지를 이용하여 Target DB 에 접근하여 테이블을 생성
+  - kafka-python 패키지를 이용하여 브로커의 토픽에 있는 데이터를 읽는 Consumer 를 생성
+  - requests 패키지를 이용하여 Consumer 를 통해 받은 데이터를 06_api_serving 파트에서 띄운 API 서버에 데이터를 보내고 예측값을 받음
+  - psycopg2 패키지를 이용하여 받은 response 를 Target DB 에 삽입
+- `docker compose -p part8-stream -f stream-docker-compose.yaml up -d` 명령어로 container를 띄움
+
+- 마지막으로 Grafana를 통해 원본 데이터와 예측 결과 값을 실시간으로 시각화하는 대시보드 구현
+- `docker compose -p part8-dashboard -f grafana-docker-compose.yaml up -d`로 띄우고 grafana에 접속하여 모니터링을 구현합니다.
 
 ![img](./08_stream/stream.png)
